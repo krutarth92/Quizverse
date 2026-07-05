@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuizVerse | Platform Architecture & Product Specification</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Space Grotesk', 'sans-serif'],
+            mono: ['Fira Code', 'monospace'],
+          },
+          colors: {
+            cyberYellow: '#FFE600',
+            cyberCyan: '#00F0FF',
+            cyberPink: '#FF0055',
+            cyberBlack: '#050505',
+            cyberGray: '#111111',
+            cyberBorder: '#222222',
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050505;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #222222;
+      border: 1px solid #00F0FF;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00F0FF;
+    }
+    
+    /* Neo-Brutalist shadow effects */
+    .neo-shadow {
+      box-shadow: 4px 4px 0px 0px #222222;
+    }
+    .neo-shadow-yellow {
+      box-shadow: 6px 6px 0px 0px #FFE600;
+    }
+    .neo-shadow-cyan {
+      box-shadow: 6px 6px 0px 0px #00F0FF;
+    }
+    .neo-shadow-pink {
+      box-shadow: 6px 6px 0px 0px #FF0055;
+    }
+    
+    /* Code highlight effects */
+    .glow-cyan:hover {
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.35);
+    }
+  </style>
+</head>
+<body class="bg-cyberBlack text-slate-300 font-sans selection:bg-cyberCyan selection:text-black">
+
+  <!-- Header Banner -->
+  <div class="bg-cyberPink text-white text-xs text-center uppercase tracking-widest py-2 px-4 font-mono font-bold border-b border-cyberBorder z-50">
+    🔒 SECURE SYSTEM DOCUMENT • CORE REVISION V1.2 • PROCTOR-VERIFIED COMPLIANT
+  </div>
+
+  <div class="flex min-h-screen">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="w-80 bg-cyberGray border-r-2 border-cyberBorder hidden xl:flex flex-col sticky top-0 h-screen overflow-y-auto p-6 shrink-0">
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-3 mb-10 pb-6 border-b border-cyberBorder">
+        <div class="w-10 h-10 bg-cyberYellow flex items-center justify-center rotate-3 border-2 border-black font-display font-black text-black text-2xl select-none">
+          Q
+        </div>
+        <div>
+          <span class="font-display font-black text-2xl tracking-tighter italic text-white uppercase">
+            QuizVerse
+          </span>
+          <span class="block text-[9px] font-mono text-cyberCyan uppercase tracking-widest font-semibold">Assessment Core Docs</span>
+        </div>
+      </div>
+
+      <!-- Navigation List -->
+      <nav class="space-y-8 flex-1">
+        <div>
+          <span class="text-[10px] uppercase font-mono tracking-widest text-slate-500 font-bold block mb-3">01. Overview</span>
+          <ul class="space-y-2 font-mono text-xs">
+            <li>
+              <a href="#vision" class="block py-2 px-3 text-slate-400 hover:text-cyberCyan border-l-2 border-transparent hover:border-cyberCyan transition-all">
+                // EXECUTIVE VISION
+              </a>
+            </li>
+            <li>
+              <a href="#architecture" class="block py-2 px-3 text-slate-400 hover:text-cyberCyan border-l-2 border-transparent hover:border-cyberCyan transition-all">
+                // SYSTEM ARCHITECTURE
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <span class="text-[10px] uppercase font-mono tracking-widest text-slate-500 font-bold block mb-3">02. Platform Modules</span>
+          <ul class="space-y-2 font-mono text-xs">
+            <li>
+              <a href="#module-auth" class="block py-2 px-3 text-slate-400 hover:text-cyberYellow border-l-2 border-transparent hover:border-cyberYellow transition-all">
+                👥 IDENTITY MANAGER
+              </a>
+            </li>
+            <li>
+              <a href="#module-dashboard" class="block py-2 px-3 text-slate-400 hover:text-cyberCyan border-l-2 border-transparent hover:border-cyberCyan transition-all">
+                📊 DASHBOARD PORTAL
+              </a>
+            </li>
+            <li>
+              <a href="#module-quiz" class="block py-2 px-3 text-slate-400 hover:text-cyberPink border-l-2 border-transparent hover:border-cyberPink transition-all">
+                ⚔️ ASSESSMENT ENGINE
+              </a>
+            </li>
+            <li>
+              <a href="#module-results" class="block py-2 px-3 text-slate-400 hover:text-cyberYellow border-l-2 border-transparent hover:border-cyberYellow transition-all">
+                📝 REVIEW & DIAGNOSTICS
+              </a>
+            </li>
+            <li>
+              <a href="#module-leaderboard" class="block py-2 px-3 text-slate-400 hover:text-cyberCyan border-l-2 border-transparent hover:border-cyberCyan transition-all">
+                🏆 COMPETITION ARENA
+              </a>
+            </li>
+            <li>
+              <a href="#module-admin" class="block py-2 px-3 text-slate-400 hover:text-cyberPink border-l-2 border-transparent hover:border-cyberPink transition-all">
+                🛠️ ADMINISTRATIVE CMS
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <span class="text-[10px] uppercase font-mono tracking-widest text-slate-500 font-bold block mb-3">03. Engineering Principles</span>
+          <ul class="space-y-2 font-mono text-xs">
+            <li>
+              <a href="#design-spec" class="block py-2 px-3 text-slate-400 hover:text-cyberCyan border-l-2 border-transparent hover:border-cyberCyan transition-all">
+                🎨 CYBER-RETRO THEME
+              </a>
+            </li>
+            <li>
+              <a href="#database-schema" class="block py-2 px-3 text-slate-400 hover:text-cyberYellow border-l-2 border-transparent hover:border-cyberYellow transition-all">
+                💾 FILEDB SCHEMA
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <!-- Footer Version Block -->
+      <div class="pt-6 border-t border-cyberBorder text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+        BUILD STATUS: <span class="text-cyberYellow">ONLINE</span><br>
+        VITE v5.4 • TS v5.5
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto px-6 sm:px-12 py-12 max-w-5xl mx-auto space-y-24">
+      
+      <!-- Hero Title -->
+      <header class="space-y-4 pb-12 border-b-2 border-cyberBorder relative">
+        <div class="absolute -top-10 -right-6 text-[150px] font-display font-black text-white/5 uppercase select-none pointer-events-none">
+          DOCS
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="px-2.5 py-1 bg-cyberCyan/10 border border-cyberCyan text-cyberCyan text-[10px] font-mono tracking-widest font-black uppercase">
+            PRODUCT PROTOCOL
+          </span>
+          <span class="text-slate-500 font-mono text-[10px]">// UPDATED JULY 2026</span>
+        </div>
+        <h1 class="text-4xl sm:text-6xl font-display font-black text-white uppercase tracking-tight leading-none">
+          QuizVerse Platform Spec
+        </h1>
+        <p class="text-slate-400 text-sm sm:text-base leading-relaxed max-w-2xl font-mono uppercase tracking-wide">
+          An interactive, high-fidelity developer assessment engine designed to test core competence in Python, Artificial Intelligence, and Cloud computing architectures.
+        </p>
+      </header>
+
+      <!-- Section: Executive Vision -->
+      <section id="vision" class="space-y-6">
+        <div class="flex items-center gap-3">
+          <div class="w-2.5 h-6 bg-cyberYellow"></div>
+          <h2 class="text-2xl sm:text-3xl font-display font-black text-white uppercase tracking-tight">
+            1. Executive Vision
+          </h2>
+        </div>
+        
+        <p class="text-slate-300 leading-relaxed text-sm">
+          Technical recruitment and internal benchmark testing are frequently bogged down by dry interfaces, rigid multi-choice prompts, and lack of real progression indices. QuizVerse shifts this paradigm by building a cyber-themed, gamified developer testing arena.
+        </p>
+
+        <!-- Bento Highlights Box -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+          <div class="bg-cyberGray border-2 border-cyberBorder p-6 neo-shadow-yellow hover:border-cyberYellow transition-all duration-300">
+            <span class="text-cyberYellow font-mono text-xs font-bold uppercase tracking-widest block mb-2">[01] Adaptive Learning</span>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Every completed session triggers an algorithmic reviewer analyzing tags and difficulty metrics to generate human-readable technical recommendations.
+            </p>
+          </div>
+          <div class="bg-cyberGray border-2 border-cyberBorder p-6 neo-shadow-cyan hover:border-cyberCyan transition-all duration-300">
+            <span class="text-cyberCyan font-mono text-xs font-bold uppercase tracking-widest block mb-2">[02] Proctor Integrity</span>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Features hard navigation locks and browser focus interruption detection blocks that warning-flag sessions when candidates navigate away.
+            </p>
+          </div>
+          <div class="bg-cyberGray border-2 border-cyberBorder p-6 neo-shadow-pink hover:border-cyberPink transition-all duration-300">
+            <span class="text-cyberPink font-mono text-xs font-bold uppercase tracking-widest block mb-2">[03] Custom CMS Engine</span>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Allows assessment administrators full CRUD powers on live questionnaires, alongside complete identity purging and leaderboard moderation.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: System Architecture -->
+      <section id="architecture" class="space-y-6">
+        <div class="flex items-center gap-3">
+          <div class="w-2.5 h-6 bg-cyberCyan"></div>
+          <h2 class="text-2xl sm:text-3xl font-display font-black text-white uppercase tracking-tight">
+            2. High-Performance Architecture
+          </h2>
+        </div>
+
+        <p class="text-slate-300 leading-relaxed text-sm">
+          QuizVerse is engineered as a secure, full-stack application built around a high-speed Express API proxy server and a reactive React Single Page Application frontend. Let's inspect the block layers:
+        </p>
+
+        <!-- Dynamic ASCII Style Diagram -->
+        <div class="p-6 bg-black border-2 border-cyberBorder rounded-none font-mono text-xs text-cyberCyan overflow-x-auto leading-relaxed">
+<pre class="whitespace-pre">
+  +-----------------------------------------------------------+
+  |                   FRONTEND CLIENT LAYER                   |
+  |  [React SPA] --> Zustand Store --> App Screen Router      |
+  |  Custom Canvas Micro-Animations, Dynamic Colors per Track |
+  +-----------------------------+-----------------------------+
+                                |
+                  Secure API Handshakes (Fetch / POST)
+                                |
+                                v
+  +-----------------------------------------------------------+
+  |                    BACKEND SERVER LAYER                   |
+  |  [Express Node Server] --> Token Verification Middleware |
+  |  Rate Limiting (3 submissions per 5 mins check)          |
+  +-----------------------------+-----------------------------+
+                                |
+                    Pristine Disk Serialization
+                                |
+                                v
+  +-----------------------------------------------------------+
+  |                     DATABASE ENGINE                       |
+  |  [FileDB Core in dbFallback.ts]                           |
+  |  Over 1,000 auto-seeded technical evaluation questions    |
+  +-----------------------------------------------------------+
+</pre>
+        </div>
+      </section>
+
+      <!-- Section: Modular Functional Breakdown -->
+      <section id="modules" class="space-y-12">
+        <div class="flex items-center gap-3">
+          <div class="w-2.5 h-6 bg-cyberPink"></div>
+          <h2 class="text-2xl sm:text-3xl font-display font-black text-white uppercase tracking-tight">
+            3. Detailed Module Specifications
+          </h2>
+        </div>
+
+        <p class="text-slate-300 leading-relaxed text-sm">
+          Below is a complete description, design logic, and developer rationale for each of the core six interactive modules powering QuizVerse:
+        </p>
+
+        <!-- Interactive Module Tabs (with CSS/JS for tab switching) -->
+        <div class="border-2 border-cyberBorder bg-cyberGray rounded-none overflow-hidden" id="module-tabs-wrapper">
+          <!-- Tab Headers -->
+          <div class="flex flex-wrap bg-black border-b border-cyberBorder text-xs font-mono">
+            <button onclick="switchTab('tab-auth')" id="btn-tab-auth" class="tab-btn px-4 py-3 border-r border-cyberBorder bg-cyberGray text-white border-t-2 border-t-cyberYellow font-black uppercase">
+              👥 Auth
+            </button>
+            <button onclick="switchTab('tab-dash')" id="btn-tab-dash" class="tab-btn px-4 py-3 border-r border-cyberBorder text-slate-400 hover:text-white uppercase">
+              📊 Dash
+            </button>
+            <button onclick="switchTab('tab-quiz')" id="btn-tab-quiz" class="tab-btn px-4 py-3 border-r border-cyberBorder text-slate-400 hover:text-white uppercase">
+              ⚔️ Quiz
+            </button>
+            <button onclick="switchTab('tab-results')" id="btn-tab-results" class="tab-btn px-4 py-3 border-r border-cyberBorder text-slate-400 hover:text-white uppercase">
+              📝 Result
+            </button>
+            <button onclick="switchTab('tab-leader')" id="btn-tab-leader" class="tab-btn px-4 py-3 border-r border-cyberBorder text-slate-400 hover:text-white uppercase">
+              🏆 Leader
+            </button>
+            <button onclick="switchTab('tab-admin')" id="btn-tab-admin" class="tab-btn px-4 py-3 text-slate-400 hover:text-white uppercase">
+              🛠️ Admin
+            </button>
+          </div>
+
+          <!-- Tab Contents -->
+          <div class="p-6 sm:p-8 space-y-6">
+            
+            <!-- Tab Auth -->
+            <div id="tab-auth" class="tab-pane space-y-4">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 bg-cyberYellow text-black font-mono text-[9px] font-black uppercase">Module 01</span>
+                <h3 class="text-lg font-display font-black text-white uppercase">Identity & Authentication Manager</h3>
+              </div>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                Handles guest creation and login credentials. On login, the server evaluates database records to determine consecutive daily check-ins. If verified, the server increments the streak (🔥).
+              </p>
+              <div class="bg-black/40 p-4 border border-cyberBorder rounded-none">
+                <strong class="text-xs font-mono text-cyberYellow block mb-1">DESIGN REASONING:</strong>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                  Avoids high-frictional sign-ups during classroom onboarding. By offering a high-quality "Developer Alias" generation script, users can instantly jump into testing while preserving progress under a persistent session key.
+                </p>
+              </div>
+            </div>
+
+            <!-- Tab Dash -->
+            <div id="tab-dash" class="tab-pane hidden space-y-4">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 bg-cyberCyan text-black font-mono text-[9px] font-black uppercase">Module 02</span>
+                <h3 class="text-lg font-display font-black text-white uppercase">Command Dashboard Hub</h3>
+              </div>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                Serves as the launchpad for user evaluations. Dynamically updates background highlights, text, and outline configurations based on the currently hovered technical track.
+              </p>
+              <div class="bg-black/40 p-4 border border-cyberBorder rounded-none">
+                <strong class="text-xs font-mono text-cyberCyan block mb-1">DESIGN REASONING:</strong>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                  Acts as a primary point of visual engagement. Dynamic background accents allow students to feel immediate contextual immersion when selecting different subject tracks.
+                </p>
+              </div>
+            </div>
+
+            <!-- Tab Quiz -->
+            <div id="tab-quiz" class="tab-pane hidden space-y-4">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 bg-cyberPink text-white font-mono text-[9px] font-black uppercase">Module 03</span>
+                <h3 class="text-lg font-display font-black text-white uppercase">Assessment Proctor Engine</h3>
+              </div>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                Handles question display, state compilation, and duration metrics. Leverages state locks to completely lock out accidental browser redirects or navbar switches during high-stakes exams.
+              </p>
+              <div class="bg-black/40 p-4 border border-cyberBorder rounded-none">
+                <strong class="text-xs font-mono text-cyberPink block mb-1">DESIGN REASONING:</strong>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                  Standard testing applications easily permit cheating or copy-pasting. QuizVerse blocks navigation menus and forces a persistent telemetry countdown so assessment validity remains intact.
+                </p>
+              </div>
+            </div>
+
+            <!-- Tab Results -->
+            <div id="tab-results" class="tab-pane hidden space-y-4">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 bg-cyberYellow text-black font-mono text-[9px] font-black uppercase">Module 04</span>
+                <h3 class="text-lg font-display font-black text-white uppercase">Adaptive Review & Diagnostics</h3>
+              </div>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                Aggregates response choices and computes overall accuracy percentages. Performs string matching to deliver targeted diagnostic directives guiding students back to key concepts.
+              </p>
+              <div class="bg-black/40 p-4 border border-cyberBorder rounded-none">
+                <strong class="text-xs font-mono text-cyberYellow block mb-1">DESIGN REASONING:</strong>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                  Traditional evaluation forms only issue cold, numerical scores. QuizVerse provides specific, micro-targeted study guidelines to turn failed attempts into learning opportunities.
+                </p>
+              </div>
+            </div>
+
+            <!-- Tab Leader -->
+            <div id="tab-leader" class="tab-pane hidden space-y-4">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 bg-cyberCyan text-black font-mono text-[9px] font-black uppercase">Module 05</span>
+                <h3 class="text-lg font-display font-black text-white uppercase">Leaderboard Competition Arena</h3>
+              </div>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                Drives engagement through localized ranking arrays. Admins can moderate ranks, and users can toggle filters between tracks and calendar durations to check active leaderboard metrics.
+              </p>
+              <div class="bg-black/40 p-4 border border-cyberBorder rounded-none">
+                <strong class="text-xs font-mono text-cyberCyan block mb-1">DESIGN REASONING:</strong>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                  Incorporating competitive metrics stimulates routine review, driving daily streak engagement up and building a vibrant peer-challenge ecosystem.
+                </p>
+              </div>
+            </div>
+
+            <!-- Tab Admin -->
+            <div id="tab-admin" class="tab-pane hidden space-y-4">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 bg-cyberPink text-white font-mono text-[9px] font-black uppercase">Module 06</span>
+                <h3 class="text-lg font-display font-black text-white uppercase">Administrative CMS Suite</h3>
+              </div>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                Equips educators with instant tools to perform dynamic question compiling, delete inactive user accounts, view detailed session histories, and hard reset database schemas.
+              </p>
+              <div class="bg-black/40 p-4 border border-cyberBorder rounded-none">
+                <strong class="text-xs font-mono text-cyberPink block mb-1">DESIGN REASONING:</strong>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                  Maintains absolute scalability. Instead of static, hard-coded codebases, this administration module offers a clean web-based interface for content creation and configuration adjustments.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: UI Design & Palette Mappings -->
+      <section id="design-spec" class="space-y-6">
+        <div class="flex items-center gap-3">
+          <div class="w-2.5 h-6 bg-cyberYellow"></div>
+          <h2 class="text-2xl sm:text-3xl font-display font-black text-white uppercase tracking-tight">
+            4. Swiss-Cyber Slate Aesthetic Specifications
+          </h2>
+        </div>
+
+        <p class="text-slate-300 leading-relaxed text-sm">
+          To maintain visual unity and strong user feedback, QuizVerse applies a robust color hierarchy mapped dynamically inside `src/themeConfig.ts`:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 font-mono text-xs">
+          <!-- Python Yellow card -->
+          <div class="border-2 border-cyberYellow bg-[#FFE600]/5 p-5 relative overflow-hidden">
+            <div class="absolute -bottom-4 -right-4 w-12 h-12 rounded-full bg-[#FFE600]/10"></div>
+            <span class="font-bold text-cyberYellow block mb-2">// TRACK ACCENT LIME</span>
+            <span class="text-white font-black block text-sm mb-1">#FFE600</span>
+            <p class="text-slate-400 text-[10px] leading-relaxed">
+              Mapped to Python, perfect scores, success alerts, and primary trigger states. Represented as vibrant neon.
+            </p>
+          </div>
+
+          <!-- AI Cyan card -->
+          <div class="border-2 border-cyberCyan bg-[#00F0FF]/5 p-5 relative overflow-hidden">
+            <div class="absolute -bottom-4 -right-4 w-12 h-12 rounded-full bg-[#00F0FF]/10"></div>
+            <span class="font-bold text-cyberCyan block mb-2">// TRACK ACCENT CYAN</span>
+            <span class="text-white font-black block text-sm mb-1">#00F0FF</span>
+            <p class="text-slate-400 text-[10px] leading-relaxed">
+              Mapped to Artificial Intelligence / ML, leaderboard status, information banners, and secondary actions.
+            </p>
+          </div>
+
+          <!-- Cloud Pink card -->
+          <div class="border-2 border-cyberPink bg-[#FF0055]/5 p-5 relative overflow-hidden">
+            <div class="absolute -bottom-4 -right-4 w-12 h-12 rounded-full bg-[#FF0055]/10"></div>
+            <span class="font-bold text-cyberPink block mb-2">// TRACK ACCENT PINK</span>
+            <span class="text-white font-black block text-sm mb-1">#FF0055</span>
+            <p class="text-slate-400 text-[10px] leading-relaxed">
+              Mapped to Cloud computing tracks, cheating warnings, administrative overlays, and danger notifications.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: MemoryDB Schema Details -->
+      <section id="database-schema" class="space-y-6 pb-12">
+        <div class="flex items-center gap-3">
+          <div class="w-2.5 h-6 bg-cyberCyan"></div>
+          <h2 class="text-2xl sm:text-3xl font-display font-black text-white uppercase tracking-tight">
+            5. Disk Serialization & Schema Layout
+          </h2>
+        </div>
+
+        <p class="text-slate-300 leading-relaxed text-sm">
+          QuizVerse relies on a structured, synchronous local File DB serialization schema (`src/db/dbFallback.ts`) for continuous persistent storage. Here's a structural outline of how schemas are mapped:
+        </p>
+
+        <!-- Dynamic JSON Schema Display -->
+        <div class="p-6 bg-black border-2 border-cyberBorder text-xs font-mono text-slate-300 overflow-x-auto">
+<pre class="text-cyberCyan">
+{
+  <span class="text-white">"users"</span>: {
+    <span class="text-cyberYellow">"user_id"</span>: {
+      "_id": "string",
+      "name": "string",
+      "email": "string",
+      "role": "admin | user",
+      "streak": "number",
+      "avatarUrl": "string"
+    }
+  },
+  <span class="text-white">"questions"</span>: {
+    <span class="text-cyberYellow">"q_id"</span>: {
+      "_id": "string",
+      "trackId": "python | ai-ml | cloud",
+      "level": "beginner | intermediate | advanced | api | django",
+      "prompt": "string",
+      "type": "mcq | multi | code-output | fill-blank",
+      "options": [{"id": "string", "text": "string"}],
+      "correctOptionIds": ["string"],
+      "difficulty": "number",
+      "explanation": "string",
+      "version": "number"
+    }
+  },
+  <span class="text-white">"sessions"</span>: {
+    <span class="text-cyberYellow">"session_id"</span>: {
+      "_id": "string",
+      "userId": "string",
+      "trackId": "string",
+      "level": "string",
+      "score": "number",
+      "startedAt": "Date"
+    }
+  }
+}
+</pre>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+
+  <script>
+    function switchTab(activeId) {
+      // Hide all panes
+      const panes = document.querySelectorAll('.tab-pane');
+      panes.forEach(pane => pane.classList.add('hidden'));
+      
+      // Remove styling from all tabs
+      const tabs = document.querySelectorAll('.tab-btn');
+      tabs.forEach(tab => {
+        tab.classList.remove('bg-cyberGray', 'text-white', 'border-t-2');
+        tab.classList.add('text-slate-400');
+        // Clear all border-t classes
+        tab.style.borderTopColor = 'transparent';
+      });
+
+      // Show active pane
+      document.getElementById(activeId).classList.remove('hidden');
+
+      // Set active tab styling
+      const activeTabBtn = document.getElementById('btn-' + activeId);
+      activeTabBtn.classList.remove('text-slate-400');
+      activeTabBtn.classList.add('bg-cyberGray', 'text-white', 'border-t-2');
+      
+      // Map border highlights based on module selection
+      if (activeId === 'tab-auth' || activeId === 'tab-results') {
+        activeTabBtn.style.borderTopColor = '#FFE600'; // Yellow
+      } else if (activeId === 'tab-dash' || activeId === 'tab-leader') {
+        activeTabBtn.style.borderTopColor = '#00F0FF'; // Cyan
+      } else {
+        activeTabBtn.style.borderTopColor = '#FF0055'; // Pink
+      }
+    }
+  </script>
+
+</body>
+</html>
