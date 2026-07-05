@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;550;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Artistic Flair Custom Theme Palette */
+  --color-art-black: #050505;
+  --color-art-card: #111111;
+  --color-art-lime: #FFE600;
+  --color-art-cyan: #00F0FF;
+  --color-art-pink: #FF0055;
+  --color-art-border: #222222;
+  --color-art-border-light: #333333;
+}
+
+/* Global document layout style override for high-contrast dark cyberpunk design */
+html, body {
+  background-color: #050505 !important;
+  color: #ffffff !important;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+/* Ensure React root uses full height and deep black canvas */
+#root {
+  background-color: #050505 !important;
+  min-height: 100vh;
+}
+
+/* Support standard class selectors if needed */
+.dark {
+  background-color: #050505 !important;
+  color: #ffffff !important;
+}
+
+/* Neo-brutalist borders & artistic components */
+.brutal-border {
+  border: 2px solid #333333;
+}
+
+.brutal-border-lime {
+  border: 2px solid #FFE600;
+}
+
+.brutal-border-cyan {
+  border: 2px solid #00F0FF;
+}
+
+.brutal-border-pink {
+  border: 2px solid #FF0055;
+}
+
+.brutal-card {
+  background: #111111;
+  border: 1px solid #222222;
+  transition: all 0.2s ease;
+}
+
+.brutal-card:hover {
+  border-color: #FFE600;
+  transform: translate(-1px, -1px);
+}
+
+.dashed-line {
+  border-top: 1px dashed #444444;
+  width: 100%;
+}
+
+/* Accent texts */
+.accent-lime {
+  color: #FFE600;
+}
+
+.accent-cyan {
+  color: #00F0FF;
+}
+
+.accent-pink {
+  color: #FF0055;
+}
+
+/* BG elements */
+.bg-lime-accent {
+  background-color: #FFE600;
+}
+
+.bg-cyan-accent {
+  background-color: #00F0FF;
+}
+
+.bg-pink-accent {
+  background-color: #FF0055;
+}
+
+/* Custom spin-slow helper for cyber-gear indicators */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 12s linear infinite;
+}
+
+/* High-contrast scrollbars corresponding to deep dark artistic aesthetic */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #222222;
+  border-radius: 4px;
+  border: 1px solid #333333;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FFE600;
+}
